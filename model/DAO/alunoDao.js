@@ -39,13 +39,41 @@ const insertAluno = async function (dadosAluno) {
 }
 
 // Atualizar  um aluno existente
-const uptadeAluno = function (dadosAluno) {
+const uptadeAluno = async function (dadosAluno) {
+
+    let sql = `update tbl_aluno set
+                        nome = '${dadosAluno.nome}', 
+                        rg = '${dadosAluno.rg}', 
+                        cpf = '${dadosAluno.cpf}', 
+                        data_nascimento = '${dadosAluno.data_nascimento}', 
+                        email = '${dadosAluno.email}'
+                        where id = ${dadosAluno.id}`
+
+    let resultStatus = await prisma.$executeRawUnsafe(sql)
+
+    if(resultStatus){
+        return true
+    }else{
+        return false
+    }
 
 }
 
 // excluir um aluno existente
-const deleteAluno = function (id) {
+const deleteAluno = async function (id) {
 
+    let idAluno = id
+
+    let sql = `delete  from tbl_aluno where id = ${idAluno}`
+    
+
+    let rsAluno = await prisma.$queryRawUnsafe(sql)
+
+    if (rsAluno) {
+        return rsAluno
+    } else {
+        return false
+    }
 }
 
 // Retorna a lista de todos os  aluno 
@@ -107,4 +135,6 @@ module.exports = {
     selectByIdAluno,
     selectByNome,
     insertAluno,
+    uptadeAluno,
+    deleteAluno,
 }

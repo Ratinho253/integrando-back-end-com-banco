@@ -40,13 +40,52 @@ const inserirAluno = async function (dadosAluno) {
 }
 
 // Atualizar  um aluno existente
-const AtualizarAluno = function (dadosAluno) {
+const AtualizarAluno = async function (dadosAluno, idAluno) {
+
+
+   //Validação  para tratar campos obrigatorios
+   if(dadosAluno.nome == ''            || dadosAluno.nome == undefined            || dadosAluno.nome.length > 100            || 
+      dadosAluno.rg == ''              || dadosAluno.nome == undefined            || dadosAluno.rg.length > 15               || 
+      dadosAluno.cpf == ''             || dadosAluno.cpf == undefined             || dadosAluno.cpf.length > 15              || 
+      dadosAluno.data_nascimento == '' || dadosAluno.data_nascimento == undefined || dadosAluno.data_nascimento.length > 10  ||
+      dadosAluno.email == ''           || dadosAluno.email == undefined           || dadosAluno.email.length > 200 
+  ){
+    return message.ERROR_REQUIRED_FIELDS // status code 400
+
+    // validação de id incorreto ou não informado
+}else if(idAluno == '' || idAluno == undefined || isNaN(idAluno)){
+  return message.ERROR_INVALID_ID // status code 400 
+}else{
+
+  // adiciona um id do aluno no json do dados
+  dadosAluno.id = idAluno
+
+  // encaminha os dados para a model do aluno 
+  let resultDadosAluno = await alunoDAO.uptadeAluno(dadosAluno)
+
+  if(resultDadosAluno){
+    return message.SUCCESS_UPTADE_ITEM // status code 200
+  }else {
+    return message.ERROR_INTERNAL_SERVER
+  }
+
+}
+
 
 }
 
 // excluir um aluno existente
-const deletarAluno = function (id) {
+const deletarAluno = async function (id) {
 
+  let idAluno = id
+
+  let dadosAluno = await alunoDAO.deleteAluno(idAluno)
+
+  if(dadosAluno){
+    return message.SUCCESS_DELETE_ID
+  }else{
+    return message.ERROR_ID_NO_EXISTENT
+  }
 }
 
 // Retorna a lista de todos os  aluno 
@@ -107,5 +146,6 @@ module.exports = {
   getBuscarAlunoID,
   getBuscarAlunoNome,
   inserirAluno,
-
+  AtualizarAluno,
+  deletarAluno,
 }
