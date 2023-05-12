@@ -112,6 +112,20 @@ const selectByIdAluno = async function (id) {
 
 }
 
+// ultimo id inserido no banco de dados 
+const  selectLastId = async function(){
+
+    let sql =  'select * from tbl_aluno order by id desc limit 1'
+    
+    let rsAluno =  await prisma.$queryRawUnsafe(sql)
+
+    if ( rsAluno.length > 0){
+        return rsAluno
+    }else {
+        return false 
+    }
+}
+
 
 // terminar
 const selectByNome = async function (nome){
@@ -137,4 +151,5 @@ module.exports = {
     insertAluno,
     uptadeAluno,
     deleteAluno,
+    selectLastId
 }

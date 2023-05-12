@@ -60,6 +60,8 @@ var message = require('./controller/modulo/config.js')
 // define que os dados que irão chegar no body da requisição será no padrão JSON
 const bodyParserJSON = bodyParser.json()
 
+///////////////////////////////////////////////////////  Todos os endpoints do alunos /////////////////////////////////////////////////////////////////////////////////////////////
+
 //EndPoints: Retorna  todos os alunos
 app.get('/v1/lion-school/aluno', cors(), async function (request, response) {
 
@@ -68,16 +70,20 @@ app.get('/v1/lion-school/aluno', cors(), async function (request, response) {
   let dadosAlunos = await controllerAluno.getAlunos()
 
   // valida se existe registro de alunos
-  if (dadosAlunos) {
-    response.json(dadosAlunos)
-    response.status(200)
-  } else {
-    response.json()
-    response.status(404)
-  }
+  // if (dadosAlunos) {
+  //   response.json(dadosAlunos)
+  //   response.status(200)
+  // } else {
+  //   response.json()
+  //   response.status(404)
+  // }
+
+  response.status(dadosAlunos.status)
+  response.json(dadosAlunos)
+
+
 
 })
-
 
 //EndPoints: Retorna o aluno filtrando pelo nome
 app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function (request, response) {
@@ -96,8 +102,6 @@ app.get('/v1/lion-school/aluno/nome/:nome', cors(), async function (request, res
 
 })
 
-
-
 //EndPoints: Retorna o aluno filtrando pelo id
 app.get('/v1/lion-school/aluno/id/:id', cors(), async function (request, response) {
 
@@ -105,13 +109,16 @@ app.get('/v1/lion-school/aluno/id/:id', cors(), async function (request, respons
 
   let dadoAluno = await controllerAluno.getBuscarAlunoID(idAluno)
 
-  if (dadoAluno) {
-    response.json(dadoAluno)
-    response.status(200)
-  } else {
-    response.json()
-    response.status
-  }
+  response.status(dadoAluno.status)
+  response.json(dadoAluno)
+
+  // if (dadoAluno) {
+  //   response.json(dadoAluno)
+  //   response.status(200)
+  // } else {
+  //   response.json()
+  //   response.status
+  // }
 
 })
 
@@ -136,8 +143,6 @@ app.post('/v1/lion-school/aluno', cors(), bodyParserJSON, async function (reques
     response.json(message.ERROR_INVALID_CONTENT_TYPE)
   }
 })
-
-
 
 //EndPoints: Atualiza um aluno existente, filtrando pelo id
 app.put('/v1/lion-school/aluno/:id', cors(), bodyParserJSON, async function (request, response) {
